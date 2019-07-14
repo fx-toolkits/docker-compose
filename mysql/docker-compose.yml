@@ -1,0 +1,39 @@
+# Use root/example as user/password credentials
+version: '3.7'
+
+services:
+  db:
+    container_name: db
+    image: mysql
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=YourPassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - data:/var/lib/mysql
+
+  backup:
+    container_name: backup
+    image: deitch/mysql-backup
+    restart: always
+    user: "0"
+    environment:
+      - DB_SERVER=db
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASS=YourPassword
+      - DB_NAMES=
+      - DB_DUMP_FREQ=60
+      - DB_DUMP_BEGIN=+1
+      - DB_DUMP_DEBUG=true
+      - DB_DUMP_TARGET=/db
+      - DB_DUMP_BY_SCHEMA=false
+      - DB_DUMP_KEEP_PERMISSIONS=true
+    volumes:
+      - backup:/db
+
+volumes:
+  data:
+  backup:

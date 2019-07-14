@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+  nginx:
+    container_name: nginx
+    image: yunfandev/nginx:alpine
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /etc/nginx/conf.d:/etc/nginx/conf.d/
+      - /var/ssl:/var/ssl/
+      - /var/log/nginx:/var/log/nginx/
+      - /var/websites:/var/websites/
