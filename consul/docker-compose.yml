@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+  consul:
+    image: consul:latest
+    container_name: consul
+    command: consul agent -bind=0.0.0.0 -data-dir=/consul/data -node=node0 -bootstrap-expect=1  -client=0.0.0.0 -server -ui 
+    ports:
+      - "8500:8500"
+    volumes:
+      - consul-data-volume:/consul/data
+    restart: always
+volumes:
+  consul-data-volume:
+    external: true
