@@ -4,9 +4,13 @@ services:
     image: portainer/portainer
     restart: always
     container_name: "portainer"
+    networks: 
+      - app
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - data:/data
-
+networks: 
+  app:
+    external: true
 volumes:
   data:

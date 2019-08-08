@@ -4,13 +4,17 @@ services:
   redis:
     container_name: redis
     image: redis
+    networks: 
+      - app
     command: redis-server /usr/local/etc/redis/redis.conf
     restart: always
     ports:
-      - "36379:6379"
+      - "6379:6379"
     volumes:
       - ./redis.conf:/usr/local/etc/redis/redis.conf
       - data:/data
-
+networks: 
+  app:
+    external: true
 volumes:
   data:

@@ -1,15 +1,36 @@
 version: '3.7'
 
 services:
-  consul:
+
+  consul-agent-1: &consul-agent
     image: consul:latest
     container_name: consul
-    command: consul agent -bind=0.0.0.0 -data-dir=/consul/data -node=node0 -bootstrap-expect=1  -client=0.0.0.0 -server -ui 
+    networks:
+      - app
+    command: "agent -retry-join consul-server-bootstrap -client 0.0.0.0"
+
+  consul-agent-2:
+    <<: *consul-agent
+
+  consul-agent-3:
+    <<: *consul-agent
+
+  consul-server-1: &consul-server
+    <<: *consul-agent
+    command: "agent -server -retry-join consul-server-bootstrap -client 0.0.0.0"
+
+  consul-server-2:
+    <<: *consul-server
+
+  consul-server-bootstrap:
+    <<: *consul-agent
     ports:
+      - "8400:8400"
       - "8500:8500"
-    volumes:
-      - consul-data-volume:/consul/data
-    restart: always
-volumes:
-  consul-data-volume:
+      - "8600:8600"
+      - "8600:8600/udp"
+    command: "agent -server -bootstrap-expect 3 -ui -client 0.0.0.0"
+
+networks:
+  app:
     external: true
