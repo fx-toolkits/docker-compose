@@ -8,7 +8,8 @@ services:
       - app
     restart: always
     ports:
-      - "5672:5672"
+      - "5673:5672"
+      - "15673:15672"
     environment: 
       - "RABBITMQ_DEFAULT_USER=rabbit"
       - "RABBITMQ_DEFAULT_PASS=rabbitmq"
